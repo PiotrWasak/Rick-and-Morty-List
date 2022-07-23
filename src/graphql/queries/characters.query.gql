@@ -1,0 +1,15 @@
+#import "../fragments/character.fragment.gql"
+
+query Characters($page: Int, $filter: FilterCharacter) {
+  characters(page: $page, filter: $filter) {
+    info {
+      count
+      pages
+      next
+      prev
+    }
+    results {
+      ...Character
+    }
+  }
+}

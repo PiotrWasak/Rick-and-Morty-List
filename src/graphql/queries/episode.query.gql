@@ -1,0 +1,17 @@
+#import "../fragments/character.fragment.gql"
+
+query Episodes($page: Int, $episode: String) {
+  episodes(page: $page, filter: { episode: $episode }) {
+    info {
+      count
+      pages
+      next
+      prev
+    }
+    results {
+      characters {
+        ...Character
+      }
+    }
+  }
+}

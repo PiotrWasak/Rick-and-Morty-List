@@ -1,0 +1,11 @@
+fragment Character on Character {
+  image
+  id
+  name
+  gender
+  species
+  status
+  episode {
+    episode
+  }
+}

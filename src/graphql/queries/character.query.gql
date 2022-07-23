@@ -1,0 +1,7 @@
+#import "../fragments/character.fragment.gql"
+
+query Character($id: ID = 2) {
+  character(id: $id) {
+    ...Character
+  }
+}
