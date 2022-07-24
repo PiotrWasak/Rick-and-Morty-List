@@ -82,7 +82,7 @@ async function search(): Promise<void> {
   if (validationResult.valid) emitter.emit("search", <string>searchValue.value);
 }
 
-const debouncedSearch = useDebounceFn(search, 1000);
+const debouncedSearch = useDebounceFn(search, 500);
 
 watch(searchValue, (value): void => {
   if (value) debouncedSearch();
