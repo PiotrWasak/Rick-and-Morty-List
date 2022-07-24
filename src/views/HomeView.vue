@@ -5,7 +5,7 @@
     <BaseNavbar class="mt-5" :tabs="tabs" v-model="activeTabIndex"></BaseNavbar>
     <div class="loading" v-if="loading || episodeLoading">
       <span>Loading...</span>
-      <img src="src/assets/images/spinner.svg" alt="loading" />
+      <img src="/src/assets/images/spinner.svg" alt="loading" />
     </div>
     <div v-else>
       <CharactersTable
