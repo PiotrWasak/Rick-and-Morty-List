@@ -1,7 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
-@import "./base.css";
+@import "base.css";
 $color-primary: #11b0c8;
-$color-secondary: #a9b1bd;
+$font-color: #a9b1bd;
 $breakpoint-tablet: 768px;
 
 * {
@@ -17,7 +16,7 @@ $breakpoint-tablet: 768px;
   }
   &__list-item {
     display: inline-block;
-    color: $color-secondary;
+    color: $font-color;
     cursor: pointer;
     &--active {
       color: $color-primary;
@@ -27,7 +26,7 @@ $breakpoint-tablet: 768px;
 }
 
 .base-search-bar {
-  color: $color-secondary;
+  color: $font-color;
   div.v-input__details {
     display: none;
   }
@@ -51,7 +50,7 @@ $breakpoint-tablet: 768px;
 
 .base-table {
   &__head {
-    color: $color-secondary;
+    color: $font-color;
     background-color: rgba(229, 234, 244, 0.25);
   }
   &__head:after {
@@ -66,7 +65,7 @@ $breakpoint-tablet: 768px;
     z-index: -1;
   }
   &__row {
-    color: $color-secondary;
+    color: $font-color;
     height: 76px;
   }
   &__cell {
@@ -124,19 +123,19 @@ li.v-pagination__item.v-pagination__item--is-active {
 
 li.v-pagination__item.v-pagination__item {
   background-color: white;
-  color: $color-secondary;
-  border: 1px solid $color-secondary;
+  color: $font-color;
+  border: 1px solid $font-color;
   border-radius: 5px;
 }
 li.v-pagination__next {
   color: $color-primary;
-  border: 1px solid $color-secondary;
+  border: 1px solid $font-color;
   border-radius: 5px;
 }
 
 li.v-pagination__prev {
-  color: $color-secondary;
-  border: 1px solid $color-secondary;
+  color: $font-color;
+  border: 1px solid $font-color;
   border-radius: 5px;
 }
 
@@ -175,7 +174,7 @@ th:first-child {
 }
 
 .base-text-secondary {
-  color: $color-secondary;
+  color: $font-color;
 }
 .pickle-rick-icon {
   cursor: pointer;

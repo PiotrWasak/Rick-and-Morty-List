@@ -1,6 +1,6 @@
 <template>
   <div ref="formRef" class="base-search-bar">
-    <v-row no-gutters>
+    <v-row :no-gutters="true" class="justify-center">
       <v-col cols="8" md="2">
         <div class="base-search-bar__label">Search by</div>
       </v-col>
@@ -41,7 +41,6 @@ import type { Events } from "@/types/EmitEvents";
 import type { FilterType } from "@/types/Characters";
 
 const emitter = inject("emitter") as Emitter<Events>;
-
 const searchInputRef = ref();
 
 function validateSearch(value: any) {

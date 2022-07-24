@@ -26,6 +26,7 @@ interface Props {
 interface Emits {
   (event: "update:modelValue", value: number): void;
 }
+
 defineProps<Props>();
 const emits = defineEmits<Emits>();
 

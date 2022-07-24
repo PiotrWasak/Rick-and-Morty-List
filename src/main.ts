@@ -1,5 +1,5 @@
 import "vuetify/styles";
-import "@/assets/main.scss";
+import "@/assets/styles/main.scss";
 import "vue-toastification/dist/index.css";
 import { createApp, provide, h } from "vue";
 import App from "./App.vue";

@@ -76,6 +76,16 @@ const currentQuery = ref<Query>("charactersQuery");
 const searchValue = ref("");
 let filterBy: FilterType = "Name";
 
+const tableHeaders = [
+  "Photo",
+  "Character ID",
+  "Name",
+  "Gender",
+  "Species",
+  "Last Episode",
+  "Add to Favorites",
+];
+
 const { result, loading, onError, refetch } = useQuery(charactersQuery, {
   page: currentPage.value,
   filter: { name: "" },
@@ -136,24 +146,7 @@ const totalPages = computed(() => {
   else return 1;
 });
 
-const tableHeaders = [
-  "Photo",
-  "Character ID",
-  "Name",
-  "Gender",
-  "Species",
-  "Last Episode",
-  "Add to Favorites",
-];
-emitter.on("addToFavorites", (characterToAdd): void => {
-  charactersStore.addCharacter(characterToAdd as unknown as Result);
-});
-
-emitter.on("removeFromFavorites", (characterToRemove): void => {
-  charactersStore.removeCharacter(characterToRemove.id);
-});
-
-function search(value: string) {
+function search(value: string): void {
   currentPage.value = 1;
   searchValue.value = value;
   switch (filterBy) {
@@ -174,14 +167,7 @@ function search(value: string) {
       break;
   }
 }
-
-emitter.on("search", search);
-
-emitter.on("changeSelect", (value) => {
-  filterBy = value;
-});
-
-function reset() {
+function reset(): void {
   filterBy = "Name";
   searchValue.value = "";
   activeTabIndex.value = 0;
@@ -191,6 +177,17 @@ function reset() {
   refetch({ page: currentPage.value, filter: { name: "" } });
 }
 
+emitter.on("search", search);
 emitter.on("logoClicked", reset);
+emitter.on("changeSelect", (value) => {
+  filterBy = value;
+});
+emitter.on("addToFavorites", (characterToAdd): void => {
+  charactersStore.addCharacter(characterToAdd as unknown as Result);
+});
+emitter.on("removeFromFavorites", (characterToRemove): void => {
+  charactersStore.removeCharacter(characterToRemove.id);
+});
+
 const { play } = useSound(pickleRickSfx);
 </script>
