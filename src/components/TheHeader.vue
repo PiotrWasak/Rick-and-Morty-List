@@ -4,8 +4,7 @@
       <v-img
         @click="handleLogoClick"
         class="base-header__logo"
-        width="240"
-        height="70"
+        width="248"
         src="/images/logo.png"
       ></v-img>
     </v-col>

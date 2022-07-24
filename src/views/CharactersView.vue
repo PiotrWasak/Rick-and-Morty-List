@@ -41,6 +41,8 @@
         <img
           alt="Pickle Rick"
           class="float-end"
+          width="100"
+          height="45"
           src="/images/pickle-rick.png"
         />
       </span>
