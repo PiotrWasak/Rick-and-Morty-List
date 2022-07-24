@@ -5,9 +5,10 @@
     width="48"
     height="68"
     :src="src"
+    alt="Character image"
   />
   <span v-if="isDead" class="base-table__img-ribbon">
-    <v-img height="32" width="32" src="/ribbon.png"></v-img>
+    <v-img height="32" width="32" src="/images/ribbon.png"></v-img>
   </span>
 </template>
 

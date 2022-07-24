@@ -34,8 +34,7 @@
 
 <script setup lang="ts">
 import { computed, inject, onMounted, ref, watch } from "vue";
-import { onKeyStroke } from "@vueuse/core";
-import { useDebounceFn } from "@vueuse/core";
+import { onKeyStroke, useDebounceFn } from "@vueuse/core";
 import { useField } from "vee-validate";
 import type { Emitter } from "mitt";
 import type { Events } from "@/types/EmitEvents";
@@ -46,11 +45,18 @@ const emitter = inject("emitter") as Emitter<Events>;
 const searchInputRef = ref();
 
 function validateSearch(value: any) {
-  if (selectedItem.value === "Identifier" && !Number.isInteger(+value?.trim()))
+  if (!value?.trim()) {
+    return "Type something to search";
+  }
+  if (
+    selectedItem.value === "Identifier" &&
+    value &&
+    !Number.isInteger(+value?.trim())
+  )
     return "Invalid ID";
   if (
     selectedItem.value === "Episode" &&
-    !value?.trim().match(/(S\d{2}E\d{2})/gim)
+    !value?.trim()?.match(/(S\d{2}E\d{2})/gim)
   )
     return "Invalid episode";
   return true;
@@ -61,7 +67,7 @@ const {
   value: searchValue,
   validate,
   resetField,
-} = useField(searchInputRef, validateSearch);
+} = useField<string>(searchInputRef, validateSearch, { initialValue: "" });
 
 onKeyStroke("/", (e): void => {
   const searchInput: HTMLInputElement =
@@ -74,21 +80,21 @@ onKeyStroke("Enter", search);
 
 async function search(): Promise<void> {
   const validationResult = await validate();
-  if (validationResult.valid) emitter.emit("search", searchValue.value);
+  if (validationResult.valid) emitter.emit("search", <string>searchValue.value);
 }
 
 const debouncedSearch = useDebounceFn(search, 1000);
 
-watch(searchValue, (): void => {
-  debouncedSearch();
+watch(searchValue, (value): void => {
+  if (value) debouncedSearch();
 });
 
 const selectedItem = ref<FilterType>("Name");
 const selectItems = ref(["Name", "Identifier", "Episode"]);
 
 watch(selectedItem, (value) => {
-  emitter.emit("changeSelect", value);
   resetField();
+  emitter.emit("changeSelect", value);
 });
 
 const isMobile = ref<boolean>();
@@ -101,6 +107,11 @@ onMounted(() => {
 });
 
 const searchLabel = computed(() => (isMobile.value ? "Press /" : "Search"));
+
+emitter.on("resetSearchBar", () => {
+  selectedItem.value = "Name";
+  resetField();
+});
 </script>
 
 <style scoped></style>

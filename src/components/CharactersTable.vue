@@ -3,7 +3,7 @@
     <v-table class="base-table">
       <thead class="base-table__head">
         <tr>
-          <th v-for="header in headers">{{ header }}</th>
+          <th scope="col" v-for="header in headers">{{ header }}</th>
         </tr>
       </thead>
       <tbody>

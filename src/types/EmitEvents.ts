@@ -5,4 +5,6 @@ export type Events = {
   removeFromFavorites: Result;
   search: string;
   changeSelect: FilterType;
+  logoClicked: void;
+  resetSearchBar: void;
 };

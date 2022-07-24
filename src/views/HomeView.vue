@@ -1,39 +1,50 @@
 <template>
-  <TheHeader class="mt-5 home-view-margin"></TheHeader>
-  <v-divider></v-divider>
-  <BaseNavbar
-    class="mt-5 home-view-margin"
-    :tabs="tabs"
-    v-model="activeTabIndex"
-  ></BaseNavbar>
-  <div class="loading" v-if="loading || episodeLoading || characterLoading">
-    <span>Loading...</span>
-    <img src="/src/assets/images/spinner.svg" alt="loading" />
-  </div>
-  <div v-else>
-    <CharactersTable
-      v-if="tableData?.length > 0"
-      class="mt-5"
-      :headers="tableHeaders"
-      :items="tableData"
-    ></CharactersTable>
-    <div
-      v-else
-      class="base-text-secondary mt-16 d-flex flex-column justify-center align-center"
-    >
-      <img alt="No result image" src="/no-result-img.png" />
-      <span class="mt-6">No results</span>
+  <div class="home-wrapper">
+    <TheHeader class="mt-5 home-view-margin"></TheHeader>
+    <v-divider></v-divider>
+    <BaseNavbar
+      class="mt-5 home-view-margin"
+      :tabs="tabs"
+      v-model="activeTabIndex"
+    ></BaseNavbar>
+    <div class="loading" v-if="loading || episodeLoading || characterLoading">
+      <span>Loading...</span>
+      <img src="/src/assets/images/spinner.svg" alt="loading" />
     </div>
-    <div class="base-text-secondary mt-16 home-view-margin pagination-width">
-      <v-pagination
-        class="ml-16"
-        v-if="totalPages > 1"
-        next-icon="mdi-play"
-        prev-icon="mdi-play mdi-rotate-180"
-        v-model="currentPage"
-        :length="totalPages"
-      ></v-pagination>
+    <div v-else>
+      <CharactersTable
+        v-if="tableData?.length > 0"
+        class="mt-5"
+        :headers="tableHeaders"
+        :items="tableData"
+      ></CharactersTable>
+      <div
+        v-else
+        class="base-text-secondary mt-16 d-flex flex-column justify-center align-center"
+      >
+        <img alt="No result image" src="/images/no-result-img.png" />
+        <span class="mt-6">No results</span>
+      </div>
+      <div class="base-text-secondary mt-16 home-view-margin pagination-width">
+        <v-pagination
+          class="ml-16"
+          v-if="totalPages > 1"
+          next-icon="mdi-play"
+          prev-icon="mdi-play mdi-rotate-180"
+          v-model="currentPage"
+          :length="totalPages"
+        ></v-pagination>
+      </div>
     </div>
+    <Teleport to=".v-main__wrap">
+      <span @click="play" class="pickle-rick-icon">
+        <img
+          alt="Pickle Rick"
+          class="float-end"
+          src="/images/pickle-rick.png"
+        />
+      </span>
+    </Teleport>
   </div>
 </template>
 
@@ -51,6 +62,8 @@ import type { Events } from "@/types/EmitEvents";
 import { useCharactersStore } from "@/stores/characters";
 import { useToast } from "vue-toastification";
 import type { FilterType, Result } from "@/types/Characters";
+import { useSound } from "@vueuse/sound";
+import pickleRickSfx from "@/assets/sounds/pickle_rick.mp3";
 
 const charactersStore = useCharactersStore();
 const toast = useToast();
@@ -65,6 +78,7 @@ let filterBy: FilterType = "Name";
 
 const { result, loading, onError, refetch } = useQuery(charactersQuery, {
   page: currentPage.value,
+  filter: { name: "" },
 });
 
 const {
@@ -94,10 +108,7 @@ characterOnError((error) => {
 watch(currentPage, (value) => {
   refetch({ page: value });
   episodeLoad();
-  console.log(episodeResult);
 });
-
-// TODO
 const tableData = computed(() => {
   //All characters data
   if (activeTabIndex.value === 0) {
@@ -109,7 +120,7 @@ const tableData = computed(() => {
       return [characterResult.value.character];
     // Favorites Data
   } else {
-    if (!searchValue.value.trim()) return charactersStore.getCharacters;
+    if (!searchValue.value?.trim()) return charactersStore.getCharacters;
     if (currentQuery.value === "charactersQuery")
       return charactersStore.filterBy("name", searchValue.value);
     if (currentQuery.value === "characterQuery")
@@ -158,7 +169,7 @@ function search(value: string) {
       currentQuery.value = "episodesQuery";
       break;
     case "Identifier":
-      characterLoad(undefined, { id: value });
+      characterLoad(undefined, { id: value.toString() });
       currentQuery.value = "characterQuery";
       break;
   }
@@ -169,4 +180,17 @@ emitter.on("search", search);
 emitter.on("changeSelect", (value) => {
   filterBy = value;
 });
+
+function reset() {
+  filterBy = "Name";
+  searchValue.value = "";
+  activeTabIndex.value = 0;
+  currentQuery.value = "charactersQuery";
+  currentPage.value = 1;
+  emitter.emit("resetSearchBar");
+  refetch({ page: currentPage.value, filter: { name: "" } });
+}
+
+emitter.on("logoClicked", reset);
+const { play } = useSound(pickleRickSfx);
 </script>

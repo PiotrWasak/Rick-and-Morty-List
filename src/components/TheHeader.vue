@@ -2,10 +2,11 @@
   <v-row>
     <v-col cols="12" md="3">
       <v-img
-        style="filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))"
+        @click="handleLogoClick"
+        class="base-header__logo"
         width="240"
         height="70"
-        src="/logo.png"
+        src="/images/logo.png"
       ></v-img>
     </v-col>
     <v-col cols="12" md="9">
@@ -16,6 +17,12 @@
 
 <script setup lang="ts">
 import BaseSearchBar from "@/components/BaseSearchBar.vue";
-</script>
+import { inject } from "vue";
+import type { Emitter } from "mitt";
+import type { Events } from "@/types/EmitEvents";
 
-<style scoped></style>
+const emitter = inject("emitter") as Emitter<Events>;
+function handleLogoClick() {
+  emitter.emit("logoClicked");
+}
+</script>

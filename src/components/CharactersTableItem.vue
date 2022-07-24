@@ -11,7 +11,7 @@
     <td>{{ item.id }}</td>
     <td>{{ item.name }}</td>
     <td>
-      <span>
+      <span class="nowrap">
         <v-icon :icon="genderIcons[item.gender]"></v-icon>
         {{ capitalize(item.gender) }}
       </span>
@@ -60,7 +60,6 @@ const isInFavorites = computed(() => {
 });
 
 function toggleFavorite() {
-  console.log({ isInFavorites });
   if (!isInFavorites.value) emitter.emit("addToFavorites", props.item);
   else emitter.emit("removeFromFavorites", props.item);
 }
