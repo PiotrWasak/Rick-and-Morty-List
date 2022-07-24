@@ -105,6 +105,10 @@ $breakpoint-tablet: 768px;
   &__bottom-line {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   }
+  &__character-photo {
+    width: 62px;
+    transform: translate3d(-15px, 3.5px, 0);
+  }
 }
 
 .base-header {

@@ -1,7 +1,7 @@
 <template>
   <tr class="base-table__row">
     <td>
-      <div style="width: 62px">
+      <div class="base-table__character-photo">
         <CharacterImage
           :src="item.image"
           :isDead="item.status === 'Dead'"
