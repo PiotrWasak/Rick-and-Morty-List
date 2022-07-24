@@ -18,8 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import { watch } from "vue";
-
 interface Props {
   tabs: string[];
   modelValue: number;

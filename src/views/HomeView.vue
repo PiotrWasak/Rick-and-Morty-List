@@ -1,31 +1,40 @@
 <template>
-  <v-container>
-    <TheHeader></TheHeader>
-    <v-divider></v-divider>
-    <BaseNavbar class="mt-5" :tabs="tabs" v-model="activeTabIndex"></BaseNavbar>
-    <div class="loading" v-if="loading || episodeLoading">
-      <span>Loading...</span>
-      <img src="/src/assets/images/spinner.svg" alt="loading" />
+  <TheHeader class="mt-5 home-view-margin"></TheHeader>
+  <v-divider></v-divider>
+  <BaseNavbar
+    class="mt-5 home-view-margin"
+    :tabs="tabs"
+    v-model="activeTabIndex"
+  ></BaseNavbar>
+  <div class="loading" v-if="loading || episodeLoading || characterLoading">
+    <span>Loading...</span>
+    <img src="/src/assets/images/spinner.svg" alt="loading" />
+  </div>
+  <div v-else>
+    <CharactersTable
+      v-if="tableData?.length > 0"
+      class="mt-5"
+      :headers="tableHeaders"
+      :items="tableData"
+    ></CharactersTable>
+    <div
+      v-else
+      class="base-text-secondary mt-16 d-flex flex-column justify-center align-center"
+    >
+      <img alt="No result image" src="/no-result-img.png" />
+      <span class="mt-6">No results</span>
     </div>
-    <div v-else>
-      <CharactersTable
-        v-if="tableData"
-        class="mt-5"
-        :headers="tableHeaders"
-        :items="tableData"
-      ></CharactersTable>
-      <div class="w-25">
-        <v-pagination
-          class="mt-5"
-          v-if="totalPages > 1"
-          next-icon="mdi-play"
-          prev-icon="mdi-play mdi-rotate-180"
-          v-model="currentPage"
-          :length="totalPages"
-        ></v-pagination>
-      </div>
+    <div class="base-text-secondary mt-16 home-view-margin pagination-width">
+      <v-pagination
+        class="ml-16"
+        v-if="totalPages > 1"
+        next-icon="mdi-play"
+        prev-icon="mdi-play mdi-rotate-180"
+        v-model="currentPage"
+        :length="totalPages"
+      ></v-pagination>
     </div>
-  </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -51,6 +60,7 @@ const activeTabIndex = ref(0);
 const currentPage = ref(1);
 type Query = "charactersQuery" | "characterQuery" | "episodesQuery";
 const currentQuery = ref<Query>("charactersQuery");
+const searchValue = ref("");
 let filterBy: FilterType = "Name";
 
 const { result, loading, onError, refetch } = useQuery(charactersQuery, {
@@ -62,24 +72,22 @@ const {
   result: episodeResult,
   loading: episodeLoading,
   onError: episodeOnError,
-  onResult,
-  refetch: episodeRefetch,
 } = useLazyQuery(episodeQuery);
-
-onResult((queryResult) => {
-  console.log("on result");
-  console.log(queryResult);
-});
 
 const {
   load: characterLoad,
   result: characterResult,
   loading: characterLoading,
   onError: characterOnError,
-  refetch: characterRefetch,
 } = useLazyQuery(characterQuery);
 
 onError((error) => {
+  toast.error(error.message ?? "Unexpected error occured");
+});
+episodeOnError((error) => {
+  toast.error(error.message ?? "Unexpected error occured");
+});
+characterOnError((error) => {
   toast.error(error.message ?? "Unexpected error occured");
 });
 
@@ -91,18 +99,28 @@ watch(currentPage, (value) => {
 
 // TODO
 const tableData = computed(() => {
+  //All characters data
   if (activeTabIndex.value === 0) {
     if (currentQuery.value === "charactersQuery")
       return result.value?.characters?.results;
     else if (currentQuery.value === "episodesQuery" && episodeResult.value)
-      return episodeResult?.value?.episodes?.results[0].characters;
+      return episodeResult?.value?.episodes?.results[0]?.characters;
     else if (characterResult.value?.character)
       return [characterResult.value.character];
-  } else return charactersStore.getCharacters;
+    // Favorites Data
+  } else {
+    if (!searchValue.value.trim()) return charactersStore.getCharacters;
+    if (currentQuery.value === "charactersQuery")
+      return charactersStore.filterBy("name", searchValue.value);
+    if (currentQuery.value === "characterQuery")
+      return charactersStore.filterBy("id", searchValue.value);
+    else return charactersStore.filterBy("episode", searchValue.value);
+  }
+  return "";
 });
 
 const totalPages = computed(() => {
-  if (currentQuery.value === "charactersQuery")
+  if (currentQuery.value === "charactersQuery" && activeTabIndex.value === 0)
     return result.value.characters.info.pages;
   else return 1;
 });
@@ -126,6 +144,7 @@ emitter.on("removeFromFavorites", (characterToRemove): void => {
 
 function search(value: string) {
   currentPage.value = 1;
+  searchValue.value = value;
   switch (filterBy) {
     case "Name":
       refetch({ page: currentPage.value, filter: { name: value } });

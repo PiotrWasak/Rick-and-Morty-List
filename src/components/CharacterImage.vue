@@ -1,12 +1,11 @@
 <template>
-  <v-img
+  <img
     :class="{ 'base-table__image--grayscale': isDead }"
     v-bind="$attrs"
-    width="43"
+    width="48"
     height="68"
-    cover
     :src="src"
-  ></v-img>
+  />
   <span v-if="isDead" class="base-table__img-ribbon">
     <v-img height="32" width="32" src="/ribbon.png"></v-img>
   </span>

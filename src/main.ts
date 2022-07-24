@@ -1,7 +1,7 @@
 import "vuetify/styles";
 import "@/assets/main.scss";
 import "vue-toastification/dist/index.css";
-import { createApp, provide, h, inject } from "vue";
+import { createApp, provide, h } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import vuetify from "./plugins/vuetify";
@@ -12,11 +12,11 @@ import mitt from "mitt";
 import type { Events } from "@/types/EmitEvents";
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
-import Toast, {POSITION} from "vue-toastification";
+import Toast, { POSITION } from "vue-toastification";
 import type { PluginOptions } from "vue-toastification";
 
 const toastOptions: PluginOptions = {
-  position: POSITION.BOTTOM_RIGHT
+  position: POSITION.BOTTOM_RIGHT,
 };
 
 loadFonts();

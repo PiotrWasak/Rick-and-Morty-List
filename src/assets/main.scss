@@ -2,6 +2,7 @@
 @import "./base.css";
 $color-primary: #11b0c8;
 $color-secondary: #a9b1bd;
+$breakpoint-tablet: 768px;
 
 * {
   font-family: "Poppins", sans-serif;
@@ -52,7 +53,17 @@ $color-secondary: #a9b1bd;
   &__head {
     color: $color-secondary;
     background-color: rgba(229, 234, 244, 0.25);
-    position: sticky;
+  }
+  &__head:after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1000px;
+    height: 100%;
+    background-color: transparent;
+    box-shadow: 1000px 0 red;
+    content: "";
+    z-index: -1;
   }
   &__row {
     color: $color-secondary;
@@ -89,8 +100,8 @@ $color-secondary: #a9b1bd;
   &__img-ribbon {
     position: absolute;
     z-index: 1;
-    right: 0px;
-    top: 0px;
+    right: 0;
+    top: 0;
   }
   &__bottom-line {
     border-bottom: 1px solid rgba(0, 0, 0, 0.12);
@@ -131,7 +142,31 @@ li.v-pagination__prev {
 }
 
 .error-msg {
-  color: #FF4646;
+  color: #ff4646;
   font-size: 12px;
   margin-left: 4px;
+}
+
+table tr td:first-child,
+th:first-child {
+  @media (min-width: $breakpoint-tablet) {
+    padding-left: 7em !important;
+  }
+}
+
+.home-view-margin {
+  @media (min-width: $breakpoint-tablet) {
+    margin-left: 64px !important;
+  }
+}
+
+.pagination-width {
+  width: 60%;
+  @media (min-width: $breakpoint-tablet) {
+    width: 45% !important;
+  }
+}
+
+.base-text-secondary {
+  color: $color-secondary;
 }

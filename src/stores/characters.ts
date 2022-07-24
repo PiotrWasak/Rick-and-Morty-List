@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { useToast } from "vue-toastification";
 import type { Result as Character } from "@/types/Characters";
 
 type LocalFilterType = "name" | "id" | "episode";
@@ -26,9 +25,14 @@ export const useCharactersStore = defineStore({
       this.characters.splice(characterToRemove, 1);
     },
     filterBy(filterType: LocalFilterType, value: string) {
-      return this.characters.filter(
-        (character) => character[filterType] === value
-      );
+      if (filterType !== "episode")
+        return this.characters.filter(
+          (character) => character[filterType] === value
+        );
+      else
+        return this.characters.filter((character) => {
+          return character.episode.find((episode) => episode.episode === value);
+        });
     },
   },
 });

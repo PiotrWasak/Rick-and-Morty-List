@@ -18,7 +18,7 @@
           v-model="searchValue"
           @keydown.esc="searchValue = ''"
           ref="searchInputRef"
-          label="Press /"
+          :label="searchLabel"
           class="base-search-bar__input"
           append-inner-icon="mdi-magnify"
           density="comfortable"
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref, watch } from "vue";
+import { computed, inject, onMounted, ref, watch } from "vue";
 import { onKeyStroke } from "@vueuse/core";
 import { useDebounceFn } from "@vueuse/core";
 import { useField } from "vee-validate";
@@ -45,12 +45,12 @@ const emitter = inject("emitter") as Emitter<Events>;
 
 const searchInputRef = ref();
 
-function validateSearch(value: string): void {
-  if (selectedItem.value === "Identifier" && !Number.isInteger(+value.trim()))
+function validateSearch(value: any) {
+  if (selectedItem.value === "Identifier" && !Number.isInteger(+value?.trim()))
     return "Invalid ID";
   if (
     selectedItem.value === "Episode" &&
-    !value.trim().match(/(S\d{2}E\d{2})/gm)
+    !value?.trim().match(/(S\d{2}E\d{2})/gim)
   )
     return "Invalid episode";
   return true;
@@ -60,6 +60,7 @@ const {
   errorMessage,
   value: searchValue,
   validate,
+  resetField,
 } = useField(searchInputRef, validateSearch);
 
 onKeyStroke("/", (e): void => {
@@ -71,7 +72,7 @@ onKeyStroke("/", (e): void => {
 
 onKeyStroke("Enter", search);
 
-async function search(): void {
+async function search(): Promise<void> {
   const validationResult = await validate();
   if (validationResult.valid) emitter.emit("search", searchValue.value);
 }
@@ -87,7 +88,19 @@ const selectItems = ref(["Name", "Identifier", "Episode"]);
 
 watch(selectedItem, (value) => {
   emitter.emit("changeSelect", value);
+  resetField();
 });
+
+const isMobile = ref<boolean>();
+function onResize(): void {
+  isMobile.value = window.innerWidth > 600;
+}
+onMounted(() => {
+  onResize();
+  window.addEventListener("resize", onResize, { passive: true });
+});
+
+const searchLabel = computed(() => (isMobile.value ? "Press /" : "Search"));
 </script>
 
 <style scoped></style>

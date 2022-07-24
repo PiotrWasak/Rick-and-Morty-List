@@ -1,11 +1,12 @@
 <template>
   <tr class="base-table__row">
     <td>
-      <CharacterImage
-        class="float-end"
-        :src="item.image"
-        :isDead="item.status === 'Dead'"
-      ></CharacterImage>
+      <div style="width: 62px">
+        <CharacterImage
+          :src="item.image"
+          :isDead="item.status === 'Dead'"
+        ></CharacterImage>
+      </div>
     </td>
     <td>{{ item.id }}</td>
     <td>{{ item.name }}</td>

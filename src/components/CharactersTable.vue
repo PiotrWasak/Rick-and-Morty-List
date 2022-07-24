@@ -10,6 +10,7 @@
         <CharactersTableItem
           v-for="item in items"
           :item="item"
+          :key="item.id"
         ></CharactersTableItem>
       </tbody>
     </v-table>
@@ -18,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps } from "vue";
+import { defineProps } from "vue";
 import CharactersTableItem from "@/components/CharactersTableItem.vue";
 import type { Characters } from "@/types/Characters";
 
@@ -27,7 +28,7 @@ interface Props {
   items: Characters;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 </script>
 
 <style scoped></style>
