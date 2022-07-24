@@ -80,7 +80,7 @@ const {
 } = useLazyQuery(characterQuery);
 
 onError((error) => {
-  toast.error(error.message);
+  toast.error(error.message ?? "Unexpected error occured");
 });
 
 watch(currentPage, (value) => {
@@ -89,6 +89,7 @@ watch(currentPage, (value) => {
   console.log(episodeResult);
 });
 
+// TODO
 const tableData = computed(() => {
   if (activeTabIndex.value === 0) {
     if (currentQuery.value === "charactersQuery")

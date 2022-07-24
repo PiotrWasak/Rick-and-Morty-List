@@ -16,7 +16,7 @@
       </span>
     </td>
     <td>{{ capitalize(item.species) }}</td>
-    <td>{{ item.episode[item.episode.length - 1].episode }}</td>
+    <td>{{ item.episode.at(-1).episode }}</td>
     <td>
       <v-icon
         @click="toggleFavorite"
@@ -59,7 +59,7 @@ const isInFavorites = computed(() => {
 });
 
 function toggleFavorite() {
-  console.log({isInFavorites})
+  console.log({ isInFavorites });
   if (!isInFavorites.value) emitter.emit("addToFavorites", props.item);
   else emitter.emit("removeFromFavorites", props.item);
 }

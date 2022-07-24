@@ -1,5 +1,5 @@
 <template>
-  <div class="base-search-bar">
+  <div ref="formRef" class="base-search-bar">
     <v-row no-gutters>
       <v-col cols="8" md="2">
         <div class="base-search-bar__label">Search by</div>
@@ -16,6 +16,7 @@
       <v-col cols="8" md="5">
         <v-text-field
           v-model="searchValue"
+          @keydown.esc="searchValue = ''"
           ref="searchInputRef"
           label="Press /"
           class="base-search-bar__input"
@@ -23,7 +24,9 @@
           density="comfortable"
           variant="outlined"
           single-line
+          clearable
         ></v-text-field>
+        <span class="error-msg">{{ errorMessage }}</span>
       </v-col>
     </v-row>
   </div>
@@ -33,6 +36,7 @@
 import { inject, ref, watch } from "vue";
 import { onKeyStroke } from "@vueuse/core";
 import { useDebounceFn } from "@vueuse/core";
+import { useField } from "vee-validate";
 import type { Emitter } from "mitt";
 import type { Events } from "@/types/EmitEvents";
 import type { FilterType } from "@/types/Characters";
@@ -40,9 +44,25 @@ import type { FilterType } from "@/types/Characters";
 const emitter = inject("emitter") as Emitter<Events>;
 
 const searchInputRef = ref();
-const searchValue = ref<string>("");
 
-onKeyStroke("/", (e) => {
+function validateSearch(value: string): void {
+  if (selectedItem.value === "Identifier" && !Number.isInteger(+value.trim()))
+    return "Invalid ID";
+  if (
+    selectedItem.value === "Episode" &&
+    !value.trim().match(/(S\d{2}E\d{2})/gm)
+  )
+    return "Invalid episode";
+  return true;
+}
+
+const {
+  errorMessage,
+  value: searchValue,
+  validate,
+} = useField(searchInputRef, validateSearch);
+
+onKeyStroke("/", (e): void => {
   const searchInput: HTMLInputElement =
     searchInputRef.value.$el.querySelector("input");
   searchInput.focus();
@@ -51,14 +71,14 @@ onKeyStroke("/", (e) => {
 
 onKeyStroke("Enter", search);
 
-function search() {
-  console.log("emit");
-  emitter.emit("search", searchValue.value);
+async function search(): void {
+  const validationResult = await validate();
+  if (validationResult.valid) emitter.emit("search", searchValue.value);
 }
 
 const debouncedSearch = useDebounceFn(search, 1000);
 
-watch(searchValue, () => {
+watch(searchValue, (): void => {
   debouncedSearch();
 });
 
