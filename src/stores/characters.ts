@@ -31,7 +31,9 @@ export const useCharactersStore = defineStore({
         );
       else
         return this.characters.filter((character) => {
-          return character.episode.find((episode) => episode.episode === value);
+          return character.episode.find(
+            (episode) => episode.episode.toUpperCase() === value.toUpperCase()
+          );
         });
     },
   },
