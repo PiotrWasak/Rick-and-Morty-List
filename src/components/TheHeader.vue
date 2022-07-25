@@ -37,5 +37,4 @@ function handleLogoClick() {
 }
 
 const { isMobile } = useBreakpoints();
-console.log("is mobile", isMobile.value);
 </script>
