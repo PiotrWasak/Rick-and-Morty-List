@@ -98,7 +98,7 @@ watch(selectedItem, (value) => {
 });
 
 const { isMobile } = useBreakpoints();
-const searchLabel = computed(() => (isMobile.value ? "Press /" : "Search"));
+const searchLabel = computed(() => (isMobile.value ? "Press /" : ""));
 
 emitter.on("resetSearchBar", () => {
   selectedItem.value = "Name";
