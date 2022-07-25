@@ -25,9 +25,13 @@ export const useCharactersStore = defineStore({
       this.characters.splice(characterToRemove, 1);
     },
     filterBy(filterType: LocalFilterType, value: string): Array<Character> {
-      if (filterType !== "episode")
+      if (filterType === "id")
         return this.characters.filter(
           (character) => character[filterType] === value
+        );
+      else if (filterType === "name")
+        return this.characters.filter((character) =>
+          character[filterType].match(new RegExp(value, "gmi"))
         );
       else
         return this.characters.filter((character) => {
