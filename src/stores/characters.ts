@@ -24,7 +24,7 @@ export const useCharactersStore = defineStore({
       );
       this.characters.splice(characterToRemove, 1);
     },
-    filterBy(filterType: LocalFilterType, value: string) {
+    filterBy(filterType: LocalFilterType, value: string): Array<Character> {
       if (filterType !== "episode")
         return this.characters.filter(
           (character) => character[filterType] === value

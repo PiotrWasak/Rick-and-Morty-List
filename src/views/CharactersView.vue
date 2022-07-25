@@ -9,7 +9,7 @@
     ></BaseNavbar>
     <div class="loading" v-if="loading || episodeLoading || characterLoading">
       <span>Loading...</span>
-      <img src="/src/assets/images/spinner.svg" alt="loading" />
+      <img src="/images/spinner.svg" alt="loading" />
     </div>
     <div v-else>
       <CharactersTable
@@ -63,7 +63,7 @@ import type { Emitter } from "mitt";
 import type { Events } from "@/types/EmitEvents";
 import { useCharactersStore } from "@/stores/characters";
 import { useToast } from "vue-toastification";
-import type { FilterType, Result } from "@/types/Characters";
+import type { FilterType } from "@/types/Characters";
 import { useSound } from "@vueuse/sound";
 import pickleRickSfx from "@/assets/sounds/pickle_rick.mp3";
 
@@ -185,7 +185,7 @@ emitter.on("changeSelect", (value) => {
   filterBy = value;
 });
 emitter.on("addToFavorites", (characterToAdd): void => {
-  charactersStore.addCharacter(characterToAdd as unknown as Result);
+  charactersStore.addCharacter(characterToAdd);
 });
 emitter.on("removeFromFavorites", (characterToRemove): void => {
   charactersStore.removeCharacter(characterToRemove.id);
