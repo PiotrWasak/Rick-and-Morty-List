@@ -1,8 +1,5 @@
 @import "base.css";
-$color-primary: #11b0c8;
-$font-color: #a9b1bd;
-$breakpoint-tablet: 768px;
-
+@import "variables";
 * {
   font-family: "Poppins", sans-serif;
   font-weight: 500;
