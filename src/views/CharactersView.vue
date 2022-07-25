@@ -1,6 +1,6 @@
 <template>
   <div class="home-wrapper">
-    <TheHeader class="mt-5 home-view-margin"></TheHeader>
+    <TheHeader class="home-view-margin"></TheHeader>
     <v-divider></v-divider>
     <BaseNavbar
       class="mt-5 home-view-margin"
