@@ -39,6 +39,7 @@ import { useField } from "vee-validate";
 import type { Emitter } from "mitt";
 import type { Events } from "@/types/EmitEvents";
 import type { FilterType } from "@/types/Characters";
+import { useBreakpoints } from "@/composables/useBreakpoints";
 
 const emitter = inject("emitter") as Emitter<Events>;
 const searchInputRef = ref();
@@ -96,15 +97,7 @@ watch(selectedItem, (value) => {
   emitter.emit("changeSelect", value);
 });
 
-const isMobile = ref<boolean>();
-function onResize(): void {
-  isMobile.value = window.innerWidth > 600;
-}
-onMounted(() => {
-  onResize();
-  window.addEventListener("resize", onResize, { passive: true });
-});
-
+const { isMobile } = useBreakpoints();
 const searchLabel = computed(() => (isMobile.value ? "Press /" : "Search"));
 
 emitter.on("resetSearchBar", () => {

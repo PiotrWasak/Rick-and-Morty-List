@@ -1,6 +1,15 @@
 <template>
   <v-row>
-    <v-col cols="12" md="3" class="d-flex justify-center align-center">
+    <v-col
+      cols="12"
+      md="3"
+      class="mt-2"
+      :class="{
+        'd-flex': !isMobile,
+        'justify-center': !isMobile,
+        'align-center': !isMobile,
+      }"
+    >
       <img
         @click="handleLogoClick"
         class="base-header__logo"
@@ -20,9 +29,13 @@ import CharactersSearchBar from "@/components/CharactersSearchBar.vue";
 import { inject } from "vue";
 import type { Emitter } from "mitt";
 import type { Events } from "@/types/EmitEvents";
+import { useBreakpoints } from "@/composables/useBreakpoints";
 
 const emitter = inject("emitter") as Emitter<Events>;
 function handleLogoClick() {
   emitter.emit("logoClicked");
 }
+
+const { isMobile } = useBreakpoints();
+console.log("is mobile", isMobile.value);
 </script>
