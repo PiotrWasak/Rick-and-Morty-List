@@ -22,7 +22,11 @@
         v-else
         class="base-text-secondary mt-16 d-flex flex-column justify-center align-center"
       >
-        <img alt="No result image" src="/images/no-result-img.png" />
+        <img
+          alt="No result image"
+          width="300"
+          src="/images/no-result-img.png"
+        />
         <span class="mt-6">No results</span>
       </div>
       <div class="base-text-secondary mt-16 home-view-margin pagination-width">
