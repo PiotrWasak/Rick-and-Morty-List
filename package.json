@@ -15,7 +15,7 @@
     "@mdi/font": "5.9.55",
     "@vue/apollo-composable": "^4.0.0-alpha.19",
     "@vueuse/core": "^8.9.4",
-    "@vueuse/sound": "1.1.6",
+    "@vueuse/sound": "2.0.1",
     "graphql": "^16.5.0",
     "graphql-tag": "^2.12.6",
     "lodash": "^4.17.21",

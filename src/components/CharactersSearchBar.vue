@@ -18,6 +18,7 @@
           v-model="searchValue"
           @keydown.esc="searchValue = ''"
           ref="searchInputRef"
+          name="search"
           :label="searchLabel"
           class="base-search-bar__input"
           append-inner-icon="mdi-magnify"
@@ -33,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, onMounted, ref, watch } from "vue";
+import { computed, inject, ref, watch } from "vue";
 import { onKeyStroke, useDebounceFn } from "@vueuse/core";
 import { useField } from "vee-validate";
 import type { Emitter } from "mitt";
@@ -67,7 +68,7 @@ const {
   value: searchValue,
   validate,
   resetField,
-} = useField<string>(searchInputRef, validateSearch, { initialValue: "" });
+} = useField<string>('search', validateSearch, { initialValue: "" });
 
 onKeyStroke("/", (e): void => {
   const searchInput: HTMLInputElement =

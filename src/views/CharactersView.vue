@@ -40,36 +40,34 @@
         ></v-pagination>
       </div>
     </div>
-    <Teleport to=".v-main__wrap">
-      <span @click="play" class="pickle-rick-icon">
-        <img
-          alt="Pickle Rick"
-          class="float-end"
-          width="100"
-          height="45"
-          src="/images/pickle-rick.png"
-        />
-      </span>
-    </Teleport>
+    <div @click="play" class="pickle-rick-icon">
+      <img
+        alt="Pickle Rick"
+        class="float-end"
+        width="100"
+        height="45"
+        src="/images/pickle-rick.png"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import TheHeader from "@/components/TheHeader.vue";
-import BaseNavbar from "@/components/BaseNavbar.vue";
-import { computed, inject, ref, watch } from "vue";
-import { useLazyQuery, useQuery } from "@vue/apollo-composable";
-import charactersQuery from "@/graphql/queries/characters.query.gql";
-import characterQuery from "@/graphql/queries/character.query.gql";
-import episodeQuery from "@/graphql/queries/episode.query.gql";
-import CharactersTable from "@/components/CharactersTable.vue";
-import type { Emitter } from "mitt";
-import type { Events } from "@/types/EmitEvents";
-import { useCharactersStore } from "@/stores/characters";
-import { useToast } from "vue-toastification";
-import type { FilterType } from "@/types/Characters";
-import { useSound } from "@vueuse/sound";
 import pickleRickSfx from "@/assets/sounds/pickle_rick.mp3";
+import BaseNavbar from "@/components/BaseNavbar.vue";
+import CharactersTable from "@/components/CharactersTable.vue";
+import TheHeader from "@/components/TheHeader.vue";
+import characterQuery from "@/graphql/queries/character.query.gql";
+import charactersQuery from "@/graphql/queries/characters.query.gql";
+import episodeQuery from "@/graphql/queries/episode.query.gql";
+import { useCharactersStore } from "@/stores/characters";
+import type { FilterType } from "@/types/Characters";
+import type { Events } from "@/types/EmitEvents";
+import { useLazyQuery, useQuery } from "@vue/apollo-composable";
+import { useSound } from "@vueuse/sound";
+import type { Emitter } from "mitt";
+import { computed, inject, ref, watch } from "vue";
+import { useToast } from "vue-toastification";
 
 const charactersStore = useCharactersStore();
 const toast = useToast();
